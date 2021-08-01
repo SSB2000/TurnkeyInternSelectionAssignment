@@ -28,13 +28,13 @@ let persons = [
     },
 ];
 
-morgan.token("id", (req) => {
-    return req.id;
-});
+// morgan.token("id", (req) => {
+//     return req.id;
+// });
 
-app.use(
-    morgan(":id :method :url :status :res[content-length] - :response-time ms ")
-);
+// app.use(
+//     morgan(":id :method :url :status :res[content-length] - :response-time ms ")
+// );
 
 app.get("/", (request, response) => {
     response.send("<h1>Hello World!<h1>");

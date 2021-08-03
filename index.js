@@ -1,6 +1,6 @@
 const { response, request } = require("express");
 const express = require("express");
-var morgan = require("morgan");
+// var morgan = require("morgan");
 const app = express();
 app.use(express.static("build"));
 app.use(express.json());
@@ -27,14 +27,6 @@ let persons = [
         number: "39-23-6423122",
     },
 ];
-
-// morgan.token("id", (req) => {
-//     return req.id;
-// });
-
-// app.use(
-//     morgan(":id :method :url :status :res[content-length] - :response-time ms ")
-// );
 
 app.get("/", (request, response) => {
     response.send("<h1>Hello World!<h1>");

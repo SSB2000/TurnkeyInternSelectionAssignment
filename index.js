@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/user");
 const app = express();
 app.use(cors());
-app.use(express.static("build"));
+// app.use(express.static("build"));
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 app.use(express.json());

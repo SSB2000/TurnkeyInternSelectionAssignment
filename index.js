@@ -1,17 +1,14 @@
 require("dotenv").config();
 const { response, request } = require("express");
 const express = require("express");
-// var morgan = require("morgan");
 const cors = require("cors"); // allows CORS
 const bcrypt = require("bcrypt");
 const User = require("./models/user");
 const app = express();
-const Person = require("./models/person");
+app.use(cors());
 app.use(express.static("build"));
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
-app.use(cors());
-app.use(express.static("build"));
 app.use(express.json());
 
 app.get("/", (request, response) => {
@@ -21,7 +18,7 @@ app.get("/", (request, response) => {
 app.get("/info", (request, response) => {
     const date = new Date();
     Person.count({}, (err, count) => {
-        response.send(`<p>Phone book has info for ${count} people.</p>
+        response.send(`<p>Hello!</p>
         <p>${date}</p>`);
     });
 });
@@ -29,11 +26,7 @@ app.get("/info", (request, response) => {
 // Login Routes
 app.use("/api/login", loginRouter);
 
-// User Get and Post handler middleware.
-// usersRouter.get("/", async (request, response) => {
-//     const users = await User.find({});
-//     response.json(users);
-// });
+// All Users
 app.use("/api/users", usersRouter);
 
 // Unknown endPoint error handler middleware

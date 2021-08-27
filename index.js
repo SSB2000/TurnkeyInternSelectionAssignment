@@ -3,9 +3,13 @@ const { response, request } = require("express");
 const express = require("express");
 // var morgan = require("morgan");
 // const cors = require("cors"); // allows CORS
+const bcrypt = require("bcrypt");
+// const usersRouter = require("express").Router();
+const User = require("./models/user");
 const app = express();
 const Person = require("./models/person");
 app.use(express.static("build"));
+const usersRouter = require("./controllers/users");
 app.use(express.json());
 
 app.get("/", (request, response) => {
@@ -84,7 +88,39 @@ app.put("/api/people/:id", (request, response, next) => {
         })
         .catch((error) => next(error));
 });
+/*
+app.get("/api/users", async (request, response) => {
+    const users = await User.find({});
+    response.json(users);
+});
 
+app.post("/api/users", async (request, response) => {
+    console.log(request);
+    const body = request.body;
+
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(body.password, saltRounds);
+
+    const user = new User({
+        username: body.username,
+        name: body.name,
+        passwordHash,
+    });
+
+    const savedUser = await user.save();
+
+    response.json(savedUser);
+});
+*/
+
+// User Get and Post handler middleware.
+usersRouter.get("/", async (request, response) => {
+    const users = await User.find({});
+    response.json(users);
+});
+app.use("/api/users", usersRouter);
+
+// Unknown endPoint error handler middleware
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: "unknown endpoint" });
 };

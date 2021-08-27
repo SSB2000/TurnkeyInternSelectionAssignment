@@ -10,6 +10,7 @@ const app = express();
 const Person = require("./models/person");
 app.use(express.static("build"));
 const usersRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 app.use(express.json());
 
 app.get("/", (request, response) => {
@@ -112,12 +113,14 @@ app.post("/api/users", async (request, response) => {
     response.json(savedUser);
 });
 */
+// Login Routes
+app.use("/api/login", loginRouter);
 
 // User Get and Post handler middleware.
-usersRouter.get("/", async (request, response) => {
-    const users = await User.find({});
-    response.json(users);
-});
+// usersRouter.get("/", async (request, response) => {
+//     const users = await User.find({});
+//     response.json(users);
+// });
 app.use("/api/users", usersRouter);
 
 // Unknown endPoint error handler middleware

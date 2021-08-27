@@ -2,25 +2,20 @@ require("dotenv").config();
 const { response, request } = require("express");
 const express = require("express");
 // var morgan = require("morgan");
-// const cors = require("cors"); // allows CORS
+const cors = require("cors"); // allows CORS
 const bcrypt = require("bcrypt");
-// const usersRouter = require("express").Router();
 const User = require("./models/user");
 const app = express();
 const Person = require("./models/person");
 app.use(express.static("build"));
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+app.use(cors());
+app.use(express.static("build"));
 app.use(express.json());
 
 app.get("/", (request, response) => {
     response.send("<h1>Hello World!<h1>");
-});
-
-app.get("/api/people", (request, response) => {
-    Person.find({}).then((people) => {
-        response.json(people);
-    });
 });
 
 app.get("/info", (request, response) => {
@@ -31,88 +26,6 @@ app.get("/info", (request, response) => {
     });
 });
 
-app.get("/api/people/:id", (request, response, next) => {
-    Person.findById(request.params.id)
-        .then((note) => {
-            if (note) {
-                response.json(note);
-            } else {
-                response.status(404).end();
-            }
-        })
-        .catch((error) => next(error));
-});
-
-app.delete("/api/people/:id", (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id)
-        .then((result) => {
-            response.status(204).end();
-        })
-        .catch((error) => next(error));
-});
-
-app.post("/api/people", (request, response, next) => {
-    const body = request.body;
-    if (body.name == undefined) {
-        return response.status(404).json({
-            error: "name missing",
-        });
-    }
-
-    const person = new Person({
-        name: body.name,
-        number: body.number,
-    });
-
-    person
-        .save()
-        .then((savedPerson) => {
-            return savedPerson.toJSON();
-        })
-        .then((savedAndFormattedPerson) => {
-            response.json(savedAndFormattedPerson);
-        })
-        .catch((error) => next(error));
-});
-
-app.put("/api/people/:id", (request, response, next) => {
-    const body = request.body;
-
-    const updatedPer = {
-        name: body.name,
-        number: body.number,
-    };
-
-    Person.findByIdAndUpdate(request.params.id, updatedPer, { new: true })
-        .then((updatedPerson) => {
-            response.json(updatedPerson);
-        })
-        .catch((error) => next(error));
-});
-/*
-app.get("/api/users", async (request, response) => {
-    const users = await User.find({});
-    response.json(users);
-});
-
-app.post("/api/users", async (request, response) => {
-    console.log(request);
-    const body = request.body;
-
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(body.password, saltRounds);
-
-    const user = new User({
-        username: body.username,
-        name: body.name,
-        passwordHash,
-    });
-
-    const savedUser = await user.save();
-
-    response.json(savedUser);
-});
-*/
 // Login Routes
 app.use("/api/login", loginRouter);
 
